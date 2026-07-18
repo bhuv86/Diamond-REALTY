@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% block title %}Projects — Admin{% endblock %}
+{% block admin_content %}
+<div class="section-head" style="border:none; padding:0; margin-bottom:24px;">
+  <div><div class="eyebrow">Manage</div><h1 style="font-size:1.9rem;">Projects</h1></div>
+  <a href="{{ url_for('admin_project_new') }}" class="btn btn-brass">+ New project</a>
+</div>
+
+<table>
+  <tr><th>Name</th><th>Location</th><th>Plots</th><th>Available</th><th></th></tr>
+  {% for p in projects %}
+  <tr>
+    <td>{{ p.name }}</td>
+    <td>{{ p.location }}</td>
+    <td>{{ p.total_count }}</td>
+    <td>{{ p.available_count }}</td>
+    <td style="display:flex; gap:8px;">
+      <a href="{{ url_for('admin_project_edit', project_id=p.id) }}" class="btn btn-outline btn-sm">Edit</a>
+      <form method="POST" action="{{ url_for('admin_project_delete', project_id=p.id) }}" onsubmit="return confirm('Delete this project and all its plots?');">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No projects yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

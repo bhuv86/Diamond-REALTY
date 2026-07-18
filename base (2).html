@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block title %}Site Visits — Admin{% endblock %}
+{% block admin_content %}
+<div class="eyebrow">Customer</div>
+<h1 style="font-size:1.9rem;">Site visit requests</h1>
+
+<table style="margin-top:24px;">
+  <tr><th>Name</th><th>Phone</th><th>Project</th><th>Preferred date</th><th>Notes</th><th>Received</th></tr>
+  {% for v in visits %}
+  <tr>
+    <td>{{ v.name }}</td>
+    <td>{{ v.phone }}</td>
+    <td>{{ v.project.name if v.project else 'Any' }}</td>
+    <td>{{ v.preferred_date or '—' }}</td>
+    <td>{{ v.notes or '—' }}</td>
+    <td>{{ v.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">No site visits requested yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

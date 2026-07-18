@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard — Admin{% endblock %}
+{% block admin_content %}
+<div class="eyebrow">Overview</div>
+<h1 style="font-size:1.9rem;">Dashboard</h1>
+
+<div class="stat-grid" style="margin-top:28px;">
+  <div class="stat-card"><b>{{ total_projects }}</b><span>Projects</span></div>
+  <div class="stat-card"><b>{{ total_plots }}</b><span>Total plots</span></div>
+  <div class="stat-card"><b>{{ available_plots }}</b><span>Available</span></div>
+  <div class="stat-card"><b>{{ reserved_plots }}</b><span>Reserved</span></div>
+  <div class="stat-card"><b>{{ sold_plots }}</b><span>Sold</span></div>
+  <div class="stat-card"><b>{{ total_inquiries }}</b><span>Enquiries</span></div>
+  <div class="stat-card"><b>{{ total_visits }}</b><span>Site visits</span></div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:12px;">
+  <div>
+    <h3>Recent enquiries</h3>
+    <table>
+      <tr><th>Name</th><th>Phone</th><th>Message</th></tr>
+      {% for i in recent_inquiries %}
+      <tr><td>{{ i.name }}</td><td>{{ i.phone }}</td><td>{{ i.message[:40] }}{% if i.message|length > 40 %}…{% endif %}</td></tr>
+      {% else %}
+      <tr><td colspan="3">No enquiries yet.</td></tr>
+      {% endfor %}
+    </table>
+    <a href="{{ url_for('admin_inquiries') }}" class="btn btn-outline btn-sm" style="margin-top:14px;">View all →</a>
+  </div>
+  <div>
+    <h3>Recent site visits</h3>
+    <table>
+      <tr><th>Name</th><th>Phone</th><th>Date</th></tr>
+      {% for v in recent_visits %}
+      <tr><td>{{ v.name }}</td><td>{{ v.phone }}</td><td>{{ v.preferred_date or '—' }}</td></tr>
+      {% else %}
+      <tr><td colspan="3">No site visits requested yet.</td></tr>
+      {% endfor %}
+    </table>
+    <a href="{{ url_for('admin_site_visits') }}" class="btn btn-outline btn-sm" style="margin-top:14px;">View all →</a>
+  </div>
+</div>
+{% endblock %}

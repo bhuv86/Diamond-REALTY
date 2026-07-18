@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %}
+{% block title %}Plots — Admin{% endblock %}
+{% block admin_content %}
+<div class="section-head" style="border:none; padding:0; margin-bottom:24px;">
+  <div><div class="eyebrow">Manage</div><h1 style="font-size:1.9rem;">Plots</h1></div>
+  <a href="{{ url_for('admin_plot_new') }}" class="btn btn-brass">+ New plot</a>
+</div>
+
+<table>
+  <tr><th>Plot #</th><th>Project</th><th>Size (sqft)</th><th>Price</th><th>Status</th><th></th></tr>
+  {% for plot in plots %}
+  <tr>
+    <td>{{ plot.plot_number }}</td>
+    <td>{{ plot.project.name }}</td>
+    <td>{{ plot.size_sqft|int }}</td>
+    <td>₹{{ "{:,.0f}".format(plot.price) }}</td>
+    <td><span class="badge badge-{{ plot.status|lower }}" style="position:static;">{{ plot.status }}</span></td>
+    <td style="display:flex; gap:8px;">
+      <a href="{{ url_for('admin_plot_edit', plot_id=plot.id) }}" class="btn btn-outline btn-sm">Edit</a>
+      <form method="POST" action="{{ url_for('admin_plot_delete', plot_id=plot.id) }}" onsubmit="return confirm('Delete this plot?');">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">No plots yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

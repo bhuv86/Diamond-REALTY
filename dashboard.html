@@ -1,0 +1,61 @@
+# Meridian Land — Real Estate Website
+
+A plotted-land developer website with:
+- Public site: project listings, searchable/filterable plot inventory, enquiry form, site-visit booking form
+- Admin panel (login-protected): dashboard analytics, manage projects & plots, view enquiries and site-visit requests
+
+## Default admin login
+
+After first deploy, log in at `/admin/login` with:
+- **Username:** `admin`
+- **Password:** `changeme123`
+
+**Change this immediately** by setting an `ADMIN_PASSWORD` environment variable in Render (see below) before your first deploy, or by editing your own password logic later.
+
+## Important: database persistence
+
+This app uses **SQLite** by default (a single file, `site.db`), which is simple but has one major limitation on Render's **free tier**: the disk is *not* persistent. Every time you redeploy or the free instance restarts, `site.db` resets — meaning **all plots, enquiries, and site-visit requests you've added will be wiped**, and it re-seeds with the sample data.
+
+This is fine for testing, but **not safe for real customer data.**
+
+### Before going live with real customers, do one of these:
+
+**Option A — Use Render's free PostgreSQL (easiest, but expires after 30 days on free tier)**
+1. In Render, create a new **PostgreSQL** database (free tier)
+2. Copy its **Internal Database URL**
+3. In your Web Service → Environment → add a variable: `DATABASE_URL` = (paste the URL)
+4. Redeploy — the app automatically uses Postgres instead of SQLite (see `app.py`)
+
+**Option B — Use a free-forever external Postgres (recommended for real use), e.g. Supabase or Neon**
+1. Create a free project at supabase.com or neon.tech
+2. Copy the Postgres connection string they give you
+3. Add it as `DATABASE_URL` in Render's environment variables
+4. Redeploy
+
+Either way, no code changes are needed — the app reads `DATABASE_URL` automatically if it's set.
+
+## Environment variables to set on Render
+
+| Variable | Purpose | Required |
+|---|---|---|
+| `SECRET_KEY` | Session security — set to any long random string | Yes |
+| `ADMIN_PASSWORD` | Sets the initial admin password on first run | Recommended |
+| `DATABASE_URL` | Points to persistent Postgres instead of SQLite | Recommended before real use |
+
+## Local development
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+Visit `http://localhost:5000`. Admin panel at `http://localhost:5000/admin/login`.
+
+## Deploying to Render
+
+Same process as before:
+1. Push this project to a GitHub repo (root of repo, not nested in a subfolder)
+2. Render → New + → Web Service → connect the repo
+3. Build command: `pip install -r requirements.txt`
+4. Start command: `gunicorn app:app`
+5. Add environment variables listed above
+6. Deploy

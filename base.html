@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block title %}Enquiries — Admin{% endblock %}
+{% block admin_content %}
+<div class="eyebrow">Customer</div>
+<h1 style="font-size:1.9rem;">Enquiries</h1>
+
+<table style="margin-top:24px;">
+  <tr><th>Name</th><th>Phone</th><th>Email</th><th>Message</th><th>Received</th></tr>
+  {% for i in inquiries %}
+  <tr>
+    <td>{{ i.name }}</td>
+    <td>{{ i.phone }}</td>
+    <td>{{ i.email or '—' }}</td>
+    <td>{{ i.message or '—' }}</td>
+    <td>{{ i.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No enquiries yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
